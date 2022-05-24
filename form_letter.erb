@@ -5,7 +5,7 @@
 </head>
 <body>
   <h1>Thanks <%= name %>!</h1>
-  <p>Thanks for coming to our conference.  We couldn't have done it without you!</p>
+  <p>Thanks for coming to our conference. We couldn't have done it without you!</p>
 
   <p>
     Political activism is at the heart of any democracy and your voice needs to be heard.
@@ -26,5 +26,11 @@
       <td><%= "#{legislators}" %></td>
     <% end %>
   </table>
+
+  <% if phone_number != 'Bad number' %>
+    <p>
+      As per your request, you will receive regular updates on the following phone number: <%= phone_number %>
+    </p>
+  <% end %>
 </body>
 </html>
