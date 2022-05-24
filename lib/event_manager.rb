@@ -50,15 +50,3 @@ contents.each do |row|
   personal_letter = erb_template.result(binding)
   save_thank_you_letter(id, personal_letter)
 end
-
-# contents = File.read('event_attendees.csv') if File.exist? "event_attendees.csv"
-# puts contents
-
-# lines = File.readlines('event_attendees.csv')
-# lines.each_with_index do |line, i|
-#   next if i.zero?
-
-#   columns = line.split(',')
-#   name = columns[2]
-#   puts name
-# end
