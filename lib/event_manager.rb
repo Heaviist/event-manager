@@ -17,6 +17,10 @@ def clean_phone_number(phone_number)
   end
 end
 
+def peak_hours(time)
+  # some code
+end
+
 def legislators_by_zipcode(zipcode)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = File.read('api.env').chomp
@@ -57,6 +61,8 @@ contents.each do |row|
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
   phone_number = clean_phone_number(row[:homephone])
+  time = Time.strptime(row[:regdate], "%m/%d/%y %H:%M")
+  # peak_hours(time)
   legislators = legislators_by_zipcode(zipcode)
 
   personal_letter = erb_template.result(binding)
