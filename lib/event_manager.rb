@@ -21,12 +21,13 @@ def peak_hours(hours)
   count_hours = hours.each_with_object(Hash.new(0)) do |hour, result|
     result[hour] += 1
   end
-  p "The peak hour is: #{(count_hours.max_by { |_hour, times| times })[0]}"
+  count_hours.each { |hour, times| puts "#{hour}: #{times}" }
+  p "The first peak hour is: #{(count_hours.max_by { |_hour, times| times })[0]}"
 end
 
 def legislators_by_zipcode(zipcode)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
-  civic_info.key = File.read('api.env').chomp
+  civic_info.key = File.read('api.env').chomp # file contains API key
   begin
     civic_info.representative_info_by_address(
       address: zipcode,
