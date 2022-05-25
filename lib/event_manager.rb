@@ -17,12 +17,11 @@ def clean_phone_number(phone_number)
   end
 end
 
-def peak_hours(hours)
-  count_hours = hours.each_with_object(Hash.new(0)) do |hour, result|
-    result[hour] += 1
+def peaks(time_data)
+  count = time_data.each_with_object(Hash.new(0)) do |data, result|
+    result[data] += 1
   end
-  count_hours.each { |hour, times| puts "#{hour}: #{times}" }
-  p "The first peak hour is: #{(count_hours.max_by { |_hour, times| times })[0]}"
+  count.max_by { |_data, times| times }[0]
 end
 
 def legislators_by_zipcode(zipcode)
@@ -60,17 +59,23 @@ contents = CSV.open(
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 hours = []
+days = []
 
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
   phone_number = clean_phone_number(row[:homephone])
-  hours << Time.strptime(row[:regdate], '%m/%d/%y %H:%M').hour
+
+  date_and_time = Time.strptime(row[:regdate], '%m/%d/%y %H:%M')
+  hours << date_and_time.hour
+  days << date_and_time.wday
+
   legislators = legislators_by_zipcode(zipcode)
 
   personal_letter = erb_template.result(binding)
   save_thank_you_letter(id, personal_letter)
 end
 
-peak_hours(hours)
+puts "First peak hour of the day: #{peaks(hours)}:00 to #{peaks(hours) + 1}:00"
+puts "Peak weekday: #{Date::DAYNAMES[peaks(days)]}"
