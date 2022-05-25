@@ -17,8 +17,11 @@ def clean_phone_number(phone_number)
   end
 end
 
-def peak_hours(time)
-  # some code
+def peak_hours(hours)
+  count_hours = hours.each_with_object(Hash.new(0)) do |hour, result|
+    result[hour] += 1
+  end
+  p "The peak hour is: #{(count_hours.max_by { |_hour, times| times })[0]}"
 end
 
 def legislators_by_zipcode(zipcode)
@@ -55,16 +58,18 @@ contents = CSV.open(
 
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
+hours = []
 
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
   phone_number = clean_phone_number(row[:homephone])
-  time = Time.strptime(row[:regdate], "%m/%d/%y %H:%M")
-  # peak_hours(time)
+  hours << Time.strptime(row[:regdate], '%m/%d/%y %H:%M').hour
   legislators = legislators_by_zipcode(zipcode)
 
   personal_letter = erb_template.result(binding)
   save_thank_you_letter(id, personal_letter)
 end
+
+peak_hours(hours)
